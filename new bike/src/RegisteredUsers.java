@@ -1,33 +1,22 @@
 public class RegisteredUsers {
-    private String email;
-    private String name;
-    
-    public RegisteredUsers(String email, String name) {
+    private final String email;
+    private final String fullName;
+
+    public RegisteredUsers(String email, String fullName) {
         this.email = email;
-        this.name = name;
+        this.fullName = fullName;
     }
-    
+
     public String getEmail() {
         return email;
     }
-    
-    public void setEmail(String email) {
-        this.email = email;
+
+    public String getFullName() {
+        return fullName;
     }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
+
     @Override
     public String toString() {
-        return "RegisteredUsers{" +
-                "email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                '}';
+        return "User: " + email + " | Name: " + fullName;
     }
 }

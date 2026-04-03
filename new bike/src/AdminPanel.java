@@ -1,86 +1,66 @@
 import java.util.Scanner;
 
+// Admin panel with log viewing and queue management
 public class AdminPanel {
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final BikeService bikeService = new BikeService();
+    private static final UserService userService = new UserService();
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        BikeRental bikeRental = new BikeRental();
-        UserService userService = new UserService();
-        
-        boolean running = true;
-        while (running) {
-            System.out.println("\n=== Admin Panel ===");
-            System.out.println("1. Demo the Bike Rental System");
-            System.out.println("2. Manage Users");
-            System.out.println("3. Exit");
-            System.out.print("Choose an option: ");
-            
+        while (true) {
+            System.out.println("\n===== ADMIN PANEL =====");
+            System.out.println("1. Start User Rental System");
+            System.out.println("2. View All Registered Users");
+            System.out.println("3. View System Logs");
+            System.out.println("4. Manage Bike Request Queue");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+
             int choice = scanner.nextInt();
-            scanner.nextLine(); // consume newline
-            
+            scanner.nextLine();
+
             switch (choice) {
                 case 1:
-                    bikeRental.simulateApplication();
+                    new BikeRental(bikeService, userService).startRentalSystem();
                     break;
                 case 2:
-                    manageUsers(scanner, userService);
-                    break;
-                case 3:
-                    running = false;
-                    System.out.println("Exiting Admin Panel...");
-                    break;
-                default:
-                    System.out.println("Invalid option. Please try again.");
-            }
-        }
-        
-        scanner.close();
-    }
-    
-    /**
-     * User management sub-menu
-     */
-    private static void manageUsers(Scanner scanner, UserService userService) {
-        boolean managing = true;
-        while (managing) {
-            System.out.println("\n=== User Management ===");
-            System.out.println("1. View all users");
-            System.out.println("2. Add user");
-            System.out.println("3. Remove user");
-            System.out.println("4. Update user");
-            System.out.println("5. Back to main menu");
-            System.out.print("Choose an option: ");
-            
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // consume newline
-            
-            switch (choice) {
-                case 1:
                     userService.viewAllUsers();
                     break;
-                case 2:
-                    System.out.print("Enter email: ");
-                    String email = scanner.nextLine();
-                    System.out.print("Enter name: ");
-                    String name = scanner.nextLine();
-                    userService.addUser(email, name);
-                    break;
                 case 3:
-                    System.out.print("Enter email to remove: ");
-                    email = scanner.nextLine();
-                    userService.removeUser(email);
+                    bikeService.viewSystemLogs();
                     break;
                 case 4:
-                    System.out.print("Enter email to update: ");
-                    email = scanner.nextLine();
-                    System.out.print("Enter new name: ");
-                    name = scanner.nextLine();
-                    userService.updateUser(email, name);
+                    manageRentalQueue();
                     break;
                 case 5:
-                    managing = false;
-                    break;
+                    System.out.println("Exiting system...");
+                    System.exit(0);
                 default:
-                    System.out.println("Invalid option. Please try again.");
+                    System.out.println("Invalid choice. Try again.");
+            }
+        }
+    }
+
+    // Submenu for managing bike rental queue
+    private static void manageRentalQueue() {
+        while (true) {
+            System.out.println("\n===== QUEUE MANAGEMENT =====");
+            System.out.println("1. View All Pending Requests");
+            System.out.println("2. Process First Request");
+            System.out.println("3. Back to Admin Menu");
+            System.out.print("Enter choice: ");
+
+            int option = scanner.nextInt();
+            scanner.nextLine();
+
+            if (option == 1) {
+                bikeService.viewRequestQueue();
+            } else if (option == 2) {
+                bikeService.processFirstRequest();
+            } else if (option == 3) {
+                break;
+            } else {
+                System.out.println("Invalid option.");
             }
         }
     }
